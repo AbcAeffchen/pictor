@@ -10,7 +10,7 @@ class Pictor:
 
         parser.add_argument("-c", "--color", type=str,
                             help="The color value as #rgb.")
-        parser.add_argument("-d", "--dim", nargs=2, type=int, default=[10, 15],
+        parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
                             help="dimension in pixels as width and height.")
         parser.add_argument("-o", "--out", type=str, default="out.svg",
                             help="The path to the output file.")
@@ -39,7 +39,7 @@ class Pictor:
 
         # depending on the arguments create the right image
         dims = self.get_image_dimensions()
-        image = self.create_random_image(dims, "#ABCABC")
+        image = self.create_random_image(dims, self.args.color)
 
         self.export_svg(image, dims)
 
@@ -96,12 +96,12 @@ class Pictor:
         scale = 40  # todo make optional
 
         # open file
-        f.write("<svg viewbox=\"0 0 {1} {0}\" xmlns=\"http://www.w3.org/2000/svg\">"
+        f.write("<svg viewbox=\"0 0 {0} {1}\" xmlns=\"http://www.w3.org/2000/svg\">"
                 .format(dims["x"] * scale, dims["y"] * scale))
 
         # write pixels
         for pixel in image["pixels"]:
-            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{2}\" y=\"{1}\" style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
+            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
                     .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale,
                             pixel["color"][0], pixel["color"][1], pixel["color"][2])
                     )
@@ -111,4 +111,5 @@ class Pictor:
         f.close()
 
 
+# test with: python pictor/core.py -v -d 30 20 -c #5fd7dd
 Pictor()
