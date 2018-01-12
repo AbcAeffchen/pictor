@@ -86,31 +86,29 @@ class Pictor:
 
     def export_svg(self, image, dims):
         """
-
-        :param image:
-        :return:
+        Writes image to file.
+        :param image: Image dictionary
+        :param dims: Image dimensions dictionary
         """
 
         f = open(self.args.out, 'w')
 
-
+        scale = 40  # todo make optional
 
         # open file
-        f.write("<svg viewbox=\"0 0 {1} {0}\" xmlns=\"http://www.w3.org/2000/svg\">".format(dims["x"] * 32, dims["y"] * 32))
+        f.write("<svg viewbox=\"0 0 {1} {0}\" xmlns=\"http://www.w3.org/2000/svg\">"
+                .format(dims["x"] * scale, dims["y"] * scale))
 
         # write pixels
         for pixel in image["pixels"]:
             f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{2}\" y=\"{1}\" style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
-                    .format(pixel["size"] * 32, pixel["x"] * 32, pixel["y"] * 32, pixel["color"][0], pixel["color"][1], pixel["color"][2]
-                            )
+                    .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale,
+                            pixel["color"][0], pixel["color"][1], pixel["color"][2])
                     )
 
         # close file
         f.write("</svg>")
         f.close()
-
-
-        # todo image is a list of pixels. write them into a file.
 
 
 Pictor()
