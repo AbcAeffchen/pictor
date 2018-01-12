@@ -20,3 +20,4 @@ TODO travis badge here
 - (planned) Pixels/Subpixels that leave the grid (random, adjustable)
 - (planned) Adjustable pixel boarders (color, thickness)
 - (planned) Adjustable image background
+- (planned) Round Pixel corners
