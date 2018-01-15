@@ -12,6 +12,8 @@ class Pictor:
                             help="The color value as #rgb.")
         parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
                             help="dimension in pixels as width and height.")
+        parser.add_argument("-n", "--num_shadings", type=int, default=10,
+                            help="dimension in pixels as width and height.")
         parser.add_argument("-o", "--out", type=str, default="out.svg",
                             help="The path to the output file.")
         parser.add_argument("-v", "--verbose", action="store_true",
@@ -26,6 +28,10 @@ class Pictor:
         # validate inputs
         if args.color is not None and not helpers.check_rgb_format(args.color):
             print("Color needs to be in RGB format")
+            return False, None
+
+        if args.num_shadings < 1:
+            print("The number of shades needs to be at least 1")
             return False, None
 
         return True, args
@@ -68,11 +74,10 @@ class Pictor:
                  "pixels": []}
 
         contrast_ragne_factor = {"min": 0.5, "max": max(1, 0.9 / cmyk_color[3])}
-        # todo adjust number of steps, currently fixed to 10
-        contrast_step_size = (contrast_ragne_factor["max"] - contrast_ragne_factor["min"]) / 10
+        contrast_step_size = (contrast_ragne_factor["max"] - contrast_ragne_factor["min"]) / self.args.num_shadings
 
         contrasts = [cmyk_color[3] * (contrast_ragne_factor["min"] + step * contrast_step_size) for step in
-                     range(0, 10)]
+                     range(0, self.args.num_shadings)]
 
         for x in range(0, dims["x"]):
             for y in range(0, dims["y"]):
@@ -101,7 +106,8 @@ class Pictor:
 
         # write pixels
         for pixel in image["pixels"]:
-            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
+            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" "
+                    "style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
                     .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale,
                             pixel["color"][0], pixel["color"][1], pixel["color"][2])
                     )
