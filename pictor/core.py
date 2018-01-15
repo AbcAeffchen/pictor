@@ -12,6 +12,8 @@ class Pictor:
                             help="The color value as #rgb.")
         parser.add_argument("-bg", "--background", type=str, default="#FFFFFF",
                             help="The background color value as #rgb.")
+        parser.add_argument("-b", "--border", nargs=2, type=str, default=["0", "#000000"],
+                            help="Width and color of the border between pixels.")
         parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
                             help="dimension in pixels as width and height.")
         parser.add_argument("-n", "--num_shadings", type=int, default=10,
@@ -46,6 +48,8 @@ class Pictor:
         if args.scale < 1:
             print("The scale needs to be positive.")
             return False, None
+
+        args.border[0] = int(args.border[0])
 
         return True, args
 
@@ -121,16 +125,18 @@ class Pictor:
         background = helpers.rgb_str_to_tuple(self.args.background)
         f.write("<rect width=\"{0}\" height=\"{1}\" x=\"0\" y=\"0\" "
                 "style=\"fill: rgb({2},{3},{4}); stroke-width: 0\"/>"
-                .format(dims["x"] * scale, dims["y"] * scale, background[0], background[1], background[2]))
+                .format(dims["x"] * scale, dims["y"] * scale, *background))
 
         # write pixels
         for pixel in image["pixels"]:
-            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" rx=\"{6}\" ry=\"{6}\" "
-                    "style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
-                    .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale,
-                            pixel["color"][0], pixel["color"][1], pixel["color"][2],
-                            self.args.radius)
-                    )
+            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" "
+                    .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale)
+                    + ("rx=\"{0}\" ry=\"{0}\" ".format(self.args.radius) if self.args.radius > 0 else "")
+                    + "style=\"fill: rgb({0},{1},{2});".format(*pixel["color"])
+                    + ("stroke-width:{0};stroke: rgb({1},{2},{3})"
+                        .format(self.args.border[0], *helpers.rgb_str_to_tuple(self.args.border[1]))
+                        if self.args.border[0] > 0 else "")
+                    + "\"/>")
 
         # close file
         f.write("</svg>")
