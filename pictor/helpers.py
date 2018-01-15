@@ -40,6 +40,10 @@ def rgb_to_cmyk(rgb_string):
     return c, m, y, k
 
 
+def rgb_str_to_tuple(rgb_string):
+    return int(rgb_string[1:3], 16), int(rgb_string[3:5], 16), int(rgb_string[5:7], 16)
+
+
 def cmyk_to_rgb(cmyk):
     """
     Converts a CMYK color to a RGB color as tuple of integers in [0, 255]

@@ -10,6 +10,8 @@ class Pictor:
 
         parser.add_argument("-c", "--color", type=str,
                             help="The color value as #rgb.")
+        parser.add_argument("-bg", "--background", type=str, default="#FFFFFF",
+                            help="The background color value as #rgb.")
         parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
                             help="dimension in pixels as width and height.")
         parser.add_argument("-n", "--num_shadings", type=int, default=10,
@@ -32,6 +34,9 @@ class Pictor:
         # validate inputs
         if args.color is not None and not helpers.check_rgb_format(args.color):
             print("Color needs to be in RGB format")
+            return False, None
+        if args.background is not None and not helpers.check_rgb_format(args.background):
+            print("Background color needs to be in RGB format")
             return False, None
 
         if args.num_shadings < 1:
@@ -111,6 +116,12 @@ class Pictor:
         # open file
         f.write("<svg viewbox=\"0 0 {0} {1}\" xmlns=\"http://www.w3.org/2000/svg\">"
                 .format(dims["x"] * scale, dims["y"] * scale))
+
+        # add background
+        background = helpers.rgb_str_to_tuple(self.args.background)
+        f.write("<rect width=\"{0}\" height=\"{1}\" x=\"0\" y=\"0\" "
+                "style=\"fill: rgb({2},{3},{4}); stroke-width: 0\"/>"
+                .format(dims["x"] * scale, dims["y"] * scale, background[0], background[1], background[2]))
 
         # write pixels
         for pixel in image["pixels"]:
