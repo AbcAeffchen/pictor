@@ -28,14 +28,10 @@ def rgb_to_cmyk(rgb_string):
     g = int(rgb_string[3:5], 16) / 255
     b = int(rgb_string[5:7], 16) / 255
 
-    # print(r,g,b)
-
     k = 1 - max(r, g, b)
     c = (1 - r - k) / (1 - k)
     m = (1 - g - k) / (1 - k)
     y = (1 - b - k) / (1 - k)
-
-    # print(c,m,y,k)
 
     return c, m, y, k
 
