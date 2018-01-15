@@ -16,6 +16,8 @@ class Pictor:
                             help="The number of shades used in the image.")
         parser.add_argument("-s", "--scale", type=int, default=40,
                             help="The size of a pixel.")
+        parser.add_argument("-r", "--radius", type=int, default=0,
+                            help="Pixel corner radius.")
         parser.add_argument("-o", "--out", type=str, default="out.svg",
                             help="The path to the output file.")
         parser.add_argument("-v", "--verbose", action="store_true",
@@ -112,10 +114,11 @@ class Pictor:
 
         # write pixels
         for pixel in image["pixels"]:
-            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" "
+            f.write("<rect height=\"{0}\" width=\"{0}\" x=\"{1}\" y=\"{2}\" rx=\"{6}\" ry=\"{6}\" "
                     "style=\"fill: rgb({3},{4},{5}); stroke-width: 0\"/>"
                     .format(pixel["size"] * scale, pixel["x"] * scale, pixel["y"] * scale,
-                            pixel["color"][0], pixel["color"][1], pixel["color"][2])
+                            pixel["color"][0], pixel["color"][1], pixel["color"][2],
+                            self.args.radius)
                     )
 
         # close file
@@ -123,5 +126,5 @@ class Pictor:
         f.close()
 
 
-# python pictor/core.py -v -d 30 20 -c #5fd7dd -n 10 -s 40
+# python pictor/core.py -v -d 30 20 -c #5fd7dd -n 10 -s 40 -r 10
 Pictor()
