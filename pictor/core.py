@@ -13,7 +13,9 @@ class Pictor:
         parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
                             help="dimension in pixels as width and height.")
         parser.add_argument("-n", "--num_shadings", type=int, default=10,
-                            help="dimension in pixels as width and height.")
+                            help="The number of shades used in the image.")
+        parser.add_argument("-s", "--scale", type=int, default=40,
+                            help="The size of a pixel.")
         parser.add_argument("-o", "--out", type=str, default="out.svg",
                             help="The path to the output file.")
         parser.add_argument("-v", "--verbose", action="store_true",
@@ -32,6 +34,10 @@ class Pictor:
 
         if args.num_shadings < 1:
             print("The number of shades needs to be at least 1")
+            return False, None
+
+        if args.scale < 1:
+            print("The scale needs to be positive.")
             return False, None
 
         return True, args
@@ -98,7 +104,7 @@ class Pictor:
 
         f = open(self.args.out, 'w')
 
-        scale = 40  # todo make optional
+        scale = self.args.scale
 
         # open file
         f.write("<svg viewbox=\"0 0 {0} {1}\" xmlns=\"http://www.w3.org/2000/svg\">"
@@ -117,5 +123,5 @@ class Pictor:
         f.close()
 
 
-# test with: python pictor/core.py -v -d 30 20 -c #5fd7dd
+# python pictor/core.py -v -d 30 20 -c #5fd7dd -n 10 -s 40
 Pictor()
