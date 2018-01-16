@@ -1,3 +1,4 @@
+from math import fmod
 
 
 def check_rgb_format(rgb_string):
@@ -52,3 +53,33 @@ def cmyk_to_rgb(cmyk):
     b = int(255 * (1-cmyk[2]) * (1-cmyk[3]))
 
     return r, g, b
+
+
+def hsv_to_rgb(h, s, v):
+    """
+    Generates an rgb color tuple from a hsv color tuple
+    :param h: hue number in [0, 360]
+    :param s: Saturation float in [0,1]
+    :param v: Value float in [0,1]
+    :return: rgb tuple
+    """
+    c = s * v
+    h_tmp = h / 60.0
+
+    x = c * (1 - abs(fmod(h_tmp, 2) - 1))
+
+    if 0 <= x < 1:
+        r1, g1, b1 = c, x, 0
+    elif 1 <= x < 2:
+        r1, g1, b1 = x, c, 0
+    elif 2 <= x < 3:
+        r1, g1, b1 = 0, c, x
+    elif 3 <= x < 4:
+        r1, g1, b1 = 0, x, c
+    elif 4 <= x < 5:
+        r1, g1, b1 = x, 0, c
+    else:
+        r1, g1, b1 = c, 0, x
+
+    m = v - c
+    return int(255 * (r1 + m)), int(255 * (g1 + m)), int(255 * (b1 + m))
