@@ -44,8 +44,8 @@ optional arguments:
     - (planned) light to dark and other way around.
     - (planned) light to dark to light and other way around.
 - Adjustable image size in terms of numbers of pixels per row and column.
-- (planned) Dynamic resolution: split some pixels into subpixels.
-    - (planned) Adjustable randomess for subpixels.
+- Dynamic resolution: split some pixels into subpixels.
+    - Adjustable randomess for subpixels.
     - (planned) Adjustable places (top, bottom, one or more coordinates in the image).
     - (planned) Subpixels that leave the grid.
 - (planned) Pixels/Subpixels that leave the grid (random, adjustable)
