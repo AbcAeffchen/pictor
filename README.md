@@ -8,8 +8,9 @@ Generate pixel art as vector image.
 
 ```
 usage: core.py [-h] [-c COLOR] [-bg BACKGROUND] [-b BORDER BORDER]
-               [-d DIM DIM] [-n NUM_SHADINGS] [-s SCALE] [-r RADIUS] [-o OUT]
-               [-v] [--version]
+               [-d DIM DIM] [-n NUM_SHADINGS] [-s SCALE] [-sp SUB_PIXELS]
+               [-spp SUB_PIXELS_PROBABILITY] [-r RADIUS] [-rb] [-o OUT] [-v]
+               [--version]
 
 Generate pixel art as vector image.
 
@@ -27,8 +28,15 @@ optional arguments:
                         The number of shades used in the image.
   -s SCALE, --scale SCALE
                         The size of a pixel.
+  -sp SUB_PIXELS, --sub-pixels SUB_PIXELS
+                        The number of times a pixel can be split into 4 sub
+                        pixels
+  -spp SUB_PIXELS_PROBABILITY, --sub-pixels-probability SUB_PIXELS_PROBABILITY
+                        The probability a pixel or sub pixel is split into sub
+                        pixels.
   -r RADIUS, --radius RADIUS
                         Pixel corner radius.
+  -rb, --rainbow        Use rainbow colors insead of a fixed color.
   -o OUT, --out OUT     The path to the output file.
   -v, --verbose         Print additional outputs
   --version             show program's version number and exit
@@ -37,7 +45,7 @@ optional arguments:
 ## Features
 
 - Random pixels of different shades of a single fixed color.
-- (planned) Random pixels of different shades of the full spectrum.
+- Random pixels of different shades of the full spectrum.
 - (planned) Colormap: Use a Bitmap image to get the color from.
 - (planned) Adjustable shade intensity.
 - (planned) Adjustable randomness.

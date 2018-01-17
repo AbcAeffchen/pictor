@@ -26,6 +26,8 @@ class Pictor:
                             help="The probability a pixel or sub pixel is split into sub pixels.")
         parser.add_argument("-r", "--radius", type=int, default=0,
                             help="Pixel corner radius.")
+        parser.add_argument("-rb", "--rainbow", action="store_true",
+                            help="Use rainbow colors insead of a fixed color.")
         parser.add_argument("-o", "--out", type=str, default="out.svg",
                             help="The path to the output file.")
         parser.add_argument("-v", "--verbose", action="store_true",
@@ -83,6 +85,13 @@ class Pictor:
                 "y": self.args.dim[1] * pixel_size,
                 "pixel_size": pixel_size}
 
+    def get_contrasts(self, cmyk_color):
+        contrast_range_factor = {"min": 0.5, "max": max(1, 0.9 / cmyk_color[3])}
+        contrast_step_size = (contrast_range_factor["max"] - contrast_range_factor["min"]) / self.args.num_shadings
+
+        return [cmyk_color[3] * (contrast_range_factor["min"] + step * contrast_step_size) for step in
+                range(0, self.args.num_shadings)]
+
     def create_random_image(self, dims, rgb_color):
         """
 
@@ -91,18 +100,18 @@ class Pictor:
         :return:
         """
 
-        cmyk_color = helpers.rgb_to_cmyk(rgb_color)
-
         image = {"background": helpers.rgb_str_to_tuple(self.args.background),
                  "pixels": []}
 
-        contrast_ragne_factor = {"min": 0.5, "max": max(1, 0.9 / cmyk_color[3])}
-        contrast_step_size = (contrast_ragne_factor["max"] - contrast_ragne_factor["min"]) / self.args.num_shadings
-
-        contrasts = [cmyk_color[3] * (contrast_ragne_factor["min"] + step * contrast_step_size) for step in
-                     range(0, self.args.num_shadings)]
+        if not self.args.rainbow :
+            cmyk_color = helpers.rgb_to_cmyk(*helpers.rgb_str_to_tuple(rgb_color))
+            contrasts = self.get_contrasts(cmyk_color)
 
         for x in range(0, dims["x"], dims["pixel_size"]):
+            if self.args.rainbow:
+                cmyk_color = helpers.rgb_to_cmyk(*helpers.hsv_to_rgb(360.0 / dims["x"] * x, 0.75, 0.9))
+                contrasts = self.get_contrasts(cmyk_color)
+
             for y in range(0, dims["y"], dims["pixel_size"]):
                 image["pixels"].extend(self.get_pixel(cmyk_color, contrasts, x, y, dims["pixel_size"]))
 

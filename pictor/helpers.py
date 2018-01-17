@@ -18,16 +18,18 @@ def check_rgb_format(rgb_string):
     return True
 
 
-def rgb_to_cmyk(rgb_string):
+def rgb_to_cmyk(r, g, b):
     """
-    Converts a rgb string to a tuple representing a CMYK color.
-    :param rgb_string:
+    Converts a RGB color tuple to a CMYK color tuple.
+    :param g: int in [0, 255]
+    :param r: int in [0, 255]
+    :param b: int in [0, 255]
     :return: (c, y, m, k) A tuple of floats in [0,1]
     """
 
-    r = int(rgb_string[1:3], 16) / 255
-    g = int(rgb_string[3:5], 16) / 255
-    b = int(rgb_string[5:7], 16) / 255
+    r = r / 255
+    g = g / 255
+    b = b / 255
 
     k = 1 - max(r, g, b)
     c = (1 - r - k) / (1 - k)
@@ -68,15 +70,15 @@ def hsv_to_rgb(h, s, v):
 
     x = c * (1 - abs(fmod(h_tmp, 2) - 1))
 
-    if 0 <= x < 1:
+    if 0 <= h_tmp < 1:
         r1, g1, b1 = c, x, 0
-    elif 1 <= x < 2:
+    elif 1 <= h_tmp < 2:
         r1, g1, b1 = x, c, 0
-    elif 2 <= x < 3:
+    elif 2 <= h_tmp < 3:
         r1, g1, b1 = 0, c, x
-    elif 3 <= x < 4:
+    elif 3 <= h_tmp < 4:
         r1, g1, b1 = 0, x, c
-    elif 4 <= x < 5:
+    elif 4 <= h_tmp < 5:
         r1, g1, b1 = x, 0, c
     else:
         r1, g1, b1 = c, 0, x
