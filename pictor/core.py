@@ -141,7 +141,7 @@ class Pictor:
         scale = self.args.scale
 
         # open file
-        f.write("<svg viewbox=\"0 0 {0} {1}\" xmlns=\"http://www.w3.org/2000/svg\">"
+        f.write("<svg viewbox=\"0 0 {0} {1}\" width=\"{0}\" height=\"{1}\" xmlns=\"http://www.w3.org/2000/svg\">"
                 .format(dims["x"] * scale, dims["y"] * scale))
 
         # add background
