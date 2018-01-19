@@ -8,27 +8,27 @@ class Pictor:
     def parse_arguments(self):
         parser = argparse.ArgumentParser(description="Generate pixel art as vector image.")
 
-        parser.add_argument("-c", "--color", type=str,
+        parser.add_argument("-c", "--color", type=str, metavar="#RGB",
                             help="The color value as #rgb.")
-        parser.add_argument("-bg", "--background", type=str, default="#FFFFFF",
+        parser.add_argument("-bg", "--background", type=str, default="#FFFFFF", metavar="#RGB",
                             help="The background color value as #rgb.")
-        parser.add_argument("-b", "--border", nargs=2, type=str, default=["0", "#000000"],
+        parser.add_argument("-b", "--border", nargs=2, type=str, default=["0", "#000000"], metavar=("width", "#RGB"),
                             help="Width and color of the border between pixels.")
-        parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10],
+        parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10], metavar=("width", "height"),
                             help="dimension in pixels as width and height.")
-        parser.add_argument("-n", "--num_shadings", type=int, default=10,
+        parser.add_argument("-n", "--num_shadings", type=int, default=10, metavar="num",
                             help="The number of shades used in the image.")
-        parser.add_argument("-s", "--scale", type=int, default=40,
+        parser.add_argument("-s", "--scale", type=int, default=40, metavar="int",
                             help="The size of a pixel.")
-        parser.add_argument("-sp", "--sub-pixels", type=int, default=0,
+        parser.add_argument("-sp", "--sub-pixels", type=int, default=0, metavar="int",
                             help="The number of times a pixel can be split into 4 sub pixels")
-        parser.add_argument("-spp", "--sub-pixels-probability", type=float, default=0.1,
+        parser.add_argument("-spp", "--sub-pixels-probability", type=float, default=0.1, metavar="float",
                             help="The probability a pixel or sub pixel is split into sub pixels.")
-        parser.add_argument("-r", "--radius", type=int, default=0,
+        parser.add_argument("-r", "--radius", type=int, default=0, metavar="int",
                             help="Pixel corner radius.")
         parser.add_argument("-rb", "--rainbow", action="store_true",
-                            help="Use rainbow colors insead of a fixed color.")
-        parser.add_argument("-o", "--out", type=str, default="out.svg",
+                            help="Use rainbow colors instead of a fixed color.")
+        parser.add_argument("-o", "--out", type=str, default="out.svg", metavar="path",
                             help="The path to the output file.")
         parser.add_argument("-v", "--verbose", action="store_true",
                             help="Print additional outputs")
