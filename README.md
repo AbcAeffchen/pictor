@@ -3,6 +3,7 @@ Generate pixel art as vector image.
 
 ![Alt text](/examples/example-0.svg "example-0")
 ![Alt text](/examples/example-1.svg "example-1")
+![Alt text](/examples/example-2.svg "example-1")
 
 ## Usage
 
