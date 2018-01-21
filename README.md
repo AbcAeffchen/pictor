@@ -61,3 +61,4 @@ optional arguments:
 - Adjustable pixel boarders (color, thickness)
 - Adjustable image background color
 - Round Pixel corners
+- (planned) Small svg files without compression.

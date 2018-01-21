@@ -101,9 +101,10 @@ class Pictor:
         """
 
         image = {"background": helpers.rgb_str_to_tuple(self.args.background),
+                 "classes": [],
                  "pixels": []}
 
-        if not self.args.rainbow :
+        if not self.args.rainbow:
             cmyk_color = helpers.rgb_to_cmyk(*helpers.rgb_str_to_tuple(rgb_color))
             contrasts = self.get_contrasts(cmyk_color)
 
@@ -146,7 +147,7 @@ class Pictor:
 
         # add background
         f.write("<rect width=\"{0}\" height=\"{1}\" x=\"0\" y=\"0\" "
-                "style=\"fill: rgb({2},{3},{4}); stroke-width: 0\"/>"
+                "style=\"fill:rgb({2},{3},{4});stroke-width:0\"/>"
                 .format(dims["x"] * scale, dims["y"] * scale, *image["background"]))
 
         # write pixels
