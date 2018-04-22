@@ -5,14 +5,17 @@ import random
 
 class Pictor:
 
-    def parse_arguments(self):
+    @staticmethod
+    def parse_arguments():
         parser = argparse.ArgumentParser(description="Generate pixel art as vector image.")
 
-        parser.add_argument("-c", "--color", type=str, metavar="#RGB",
-                            help="The color value as #rgb.")
-        parser.add_argument("-bg", "--background", type=str, default="#FFFFFF", metavar="#RGB",
+        parser.add_argument("-c", "--color", type=str, metavar="#RRGGBB",
+                            help="The color value as #rrggbb.")
+        parser.add_argument("--contrast", nargs=2, type=float, default=[0.5, 0.9], metavar=("min", "max"),
+                            help="The contrast range of the pixels.")
+        parser.add_argument("-bg", "--background", type=str, default="#FFFFFF", metavar="#RRGGBB",
                             help="The background color value as #rgb.")
-        parser.add_argument("-b", "--border", nargs=2, type=str, default=["0", "#000000"], metavar=("width", "#RGB"),
+        parser.add_argument("-b", "--border", nargs=2, type=str, default=["0", "#000000"], metavar=("width", "#RRGGBB"),
                             help="Width and color of the border between pixels.")
         parser.add_argument("-d", "--dim", nargs=2, type=int, default=[15, 10], metavar=("width", "height"),
                             help="dimension in pixels as width and height.")
@@ -56,6 +59,11 @@ class Pictor:
             print("The scale needs to be positive.")
             return False, None
 
+        if args.contrast[0] > 1 or args.contrast[0] < 0 or args.contrast[1] > 1 or args.contrast[1] < 0 \
+                or args.contrast[0] > args.contrast[1]:
+            print("Contrasts need to be between 0 and 1 and min contrast needs to be smaller than max contrast.")
+            return False, None
+
         args.border[0] = int(args.border[0])
 
         return True, args
@@ -86,10 +94,10 @@ class Pictor:
                 "pixel_size": pixel_size}
 
     def get_contrasts(self, cmyk_color):
-        contrast_range_factor = {"min": 0.5, "max": max(1, 0.9 / cmyk_color[3])}
-        contrast_step_size = (contrast_range_factor["max"] - contrast_range_factor["min"]) / self.args.num_shadings
+        contrast_range_factor = {"min": self.args.contrast[0], "max": self.args.contrast[1]}
+        contrast_step_size = (contrast_range_factor["max"] - contrast_range_factor["min"]) / (self.args.num_shadings - 1)
 
-        return [cmyk_color[3] * (contrast_range_factor["min"] + step * contrast_step_size) for step in
+        return [contrast_range_factor["min"] + step * contrast_step_size for step in
                 range(0, self.args.num_shadings)]
 
     def create_random_image(self, dims, rgb_color):
